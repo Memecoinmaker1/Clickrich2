@@ -3,408 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CryptoClicker</title>
+    <title>Einfacher 3D Ego Shooter</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
-        body {
-            font-family: 'Roboto', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: #ffffff;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .game-container {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            max-width: 500px;
-            width: 90%;
-            margin-bottom: 20px;
-        }
-        #stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        #points, #level {
-            font-size: 24px;
-            font-weight: bold;
-        }
-        #progress-container {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            height: 10px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        #progress-bar {
-            width: 0%;
-            height: 100%;
-            background-color: #4CAF50;
-            transition: width 0.5s ease-in-out;
-        }
-        .button {
-            font-size: 18px;
-            padding: 15px 30px;
-            cursor: pointer;
-            border: none;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            outline: none;
-            margin: 10px 0;
-            width: 100%;
-            color: #ffffff;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        #clickButton {
-            background-color: #4CAF50;
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
-        }
-        #powerUpButton {
-            background-color: #ff9800;
-            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
-        }
-        #cryptoMiningButton {
-            background-color: #3498db;
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
-        }
-        .button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-        .button:active {
-            transform: translateY(1px);
-        }
-        .button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        #powerUpTimer, #cryptoMiningInfo {
-            font-size: 16px;
-            margin-top: 10px;
-            text-align: center;
-        }
-        .plus-one {
-            position: fixed;
-            font-size: 24px;
-            font-weight: bold;
-            color: #4CAF50;
-            pointer-events: none;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
-        }
-        .level-up {
-            position: fixed;
-            font-size: 36px;
-            font-weight: bold;
-            color: #ff6b6b;
-            pointer-events: none;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
-        }
-        #cryptoMiningImage {
-            width: 80px;
-            height: 80px;
-            margin: 10px auto;
-            display: block;
-            transition: all 0.3s ease;
-        }
-        #cryptoMiningImage:hover {
-            transform: scale(1.1);
-        }
-        #leaderboard {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            max-width: 500px;
-            width: 90%;
-        }
-        #leaderboard h2 {
-            text-align: center;
-            margin-top: 0;
-        }
-        #leaderboard-list {
-            list-style-type: none;
-            padding: 0;
-        }
-        #leaderboard-list li {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-        #playerName {
-            font-size: 18px;
-            padding: 10px;
-            width: 100%;
-            margin-bottom: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-        }
-        #playerName::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
+        body { margin: 0; }
+        canvas { display: block; }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <div id="stats">
-            <div id="points">0 Punkte</div>
-            <div id="level">Level 1</div>
-        </div>
-        <div id="progress-container">
-            <div id="progress-bar"></div>
-        </div>
-        <button id="clickButton" class="button">Klicken</button>
-        <button id="powerUpButton" class="button">Power-Up (100 Punkte)</button>
-        <div id="powerUpTimer"></div>
-        <img id="cryptoMiningImage" src="https://example.com/path/to/your/crypto-mining-image.png" alt="Crypto Mining Gerät">
-        <button id="cryptoMiningButton" class="button">Crypto Mining (500 Punkte)</button>
-        <div id="cryptoMiningInfo"></div>
-        <input type="text" id="playerName" placeholder="Dein Name" maxlength="20">
-    </div>
-
-    <div id="leaderboard">
-        <h2>Bestenliste</h2>
-        <ol id="leaderboard-list"></ol>
-    </div>
-
-    <!-- Audio-Elemente bleiben unverändert -->
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        let points = 0;
-        let level = 1;
-        let pointMultiplier = 1;
-        let powerUpActive = false;
-        let powerUpCost = 100;
-        let cryptoMiners = 0;
-        let cryptoMinerCost = 500;
-        const pointsDisplay = document.getElementById('points');
-        const levelDisplay = document.getElementById('level');
-        const clickButton = document.getElementById('clickButton');
-        const powerUpButton = document.getElementById('powerUpButton');
-        const powerUpTimer = document.getElementById('powerUpTimer');
-        const cryptoMiningButton = document.getElementById('cryptoMiningButton');
-        const cryptoMiningInfo = document.getElementById('cryptoMiningInfo');
-        const clickSounds = document.querySelectorAll('.clickSound');
-        const levelUpSound = document.getElementById('levelUpSound');
-        const progressBar = document.getElementById('progress-bar');
-        const playerNameInput = document.getElementById('playerName');
-        const leaderboardList = document.getElementById('leaderboard-list');
-        let currentSoundIndex = 0;
+        // Szene, Kamera und Renderer erstellen
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87CEEB); // Himmelblau
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-        const levelThresholds = [100, 250, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000];
+        // Spieler erstellen
+        const playerGeometry = new THREE.BoxGeometry(0.5, 1, 0.5);
+        const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const player = new THREE.Mesh(playerGeometry, playerMaterial);
+        scene.add(player);
 
-        clickButton.addEventListener('click', () => {
-            points += 1 * pointMultiplier;
-            updateDisplay();
-            createPlusOne();
-            playClickSound();
-            updateProgressBar();
-            checkLevelUp();
-            updateLeaderboard();
+        // Kamera initial positionieren
+        camera.position.set(0, 1, 3);
+        camera.lookAt(player.position);
+
+        // Bewegung
+        const keys = {};
+        document.addEventListener('keydown', (event) => {
+            keys[event.code] = true;
+        });
+        document.addEventListener('keyup', (event) => {
+            keys[event.code] = false;
         });
 
-        powerUpButton.addEventListener('click', activatePowerUp);
-        cryptoMiningButton.addEventListener('click', buyCryptoMiner);
+        // Schießen
+        const bullets = [];
+        const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        document.addEventListener('mousedown', (event) => {
+            if (event.button === 0) { // Linke Maustaste
+                console.log("Linke Maustaste gedrückt!"); // Debugging-Ausgabe
+                const bulletGeometry = new THREE.SphereGeometry(0.1, 8, 8);
+                const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
+                bullet.position.copy(camera.position);
+                bullet.velocity = new THREE.Vector3();
+                bullet.velocity.copy(camera.getWorldDirection(new THREE.Vector3()).multiplyScalar(10));
+                bullets.push(bullet);
+                scene.add(bullet);
+                console.log("Kugel erstellt und zur Szene hinzugefügt."); // Debugging-Ausgabe
+            }
+        });
 
-        function activatePowerUp() {
-            if (points >= powerUpCost && !powerUpActive) {
-                points -= powerUpCost;
-                powerUpActive = true;
-                pointMultiplier = 2;
-                powerUpButton.disabled = true;
-                let timeLeft = 30;
+        // Gegner erstellen
+        const enemies = [];
+        const enemyMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+        for (let i = 0; i < 5; i++) {
+            const enemyGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+            const enemy = new THREE.Mesh(enemyGeometry, enemyMaterial);
+            enemy.position.set((Math.random() - 0.5) * 10, 0.25, (Math.random() - 0.5) * 10);
+            enemies.push(enemy);
+            scene.add(enemy);
+        }
 
-                const powerUpInterval = setInterval(() => {
-                    timeLeft--;
-                    powerUpTimer.textContent = `Power-Up aktiv: ${timeLeft}s`;
+        // Boden hinzufügen
+        const floorGeometry = new THREE.PlaneGeometry(20, 20);
+        const floorMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide });
+        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.rotation.x = -Math.PI / 2; // Boden horizontal ausrichten
+        scene.add(floor);
 
-                    if (timeLeft <= 0) {
-                        clearInterval(powerUpInterval);
-                        powerUpActive = false;
-                        pointMultiplier = 1;
-                        powerUpButton.disabled = false;
-                        powerUpTimer.textContent = '';
+        // Wände hinzufügen
+        const wallMaterial = new THREE.MeshBasicMaterial({ color: 0x888888 });
+        const wallGeometry = new THREE.BoxGeometry(0.1, 2, 20);
+        const wall1 = new THREE.Mesh(wallGeometry, wallMaterial);
+        wall1.position.set(-10, 1, 0);
+        scene.add(wall1);
+
+        const wall2 = new THREE.Mesh(wallGeometry, wallMaterial);
+        wall2.position.set(10, 1, 0);
+        scene.add(wall2);
+
+        const wall3 = new THREE.Mesh(wallGeometry, wallMaterial);
+        wall3.rotation.y = Math.PI / 2; // Wand drehen
+        wall3.position.set(0, 1, -10);
+        scene.add(wall3);
+
+        const wall4 = new THREE.Mesh(wallGeometry, wallMaterial);
+        wall4.rotation.y = Math.PI / 2; // Wand drehen
+        wall4.position.set(0, 1, 10);
+        scene.add(wall4);
+
+        // Animationsschleife
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Spielerbewegung
+            if (keys['ArrowUp'] || keys['KeyW']) player.position.z -= 0.1;
+            if (keys['ArrowDown'] || keys['KeyS']) player.position.z += 0.1;
+            if (keys['ArrowLeft'] || keys['KeyA']) player.position.x -= 0.1;
+            if (keys['ArrowRight'] || keys['KeyD']) player.position.x += 0.1;
+
+            // Kamera folgt dem Spieler
+            camera.position.x = player.position.x;
+            camera.position.z = player.position.z + 3; // Abstand zur Spielerposition
+            camera.position.y = 1; // Höhe der Kamera
+            camera.lookAt(player.position);
+
+            // Kugeln bewegen und Kollisionserkennung
+            bullets.forEach((bullet, bulletIndex) => {
+                bullet.position.add(bullet.velocity);
+                if (bullet.position.length() > 50) {
+                    scene.remove(bullet);
+                    bullets.splice(bulletIndex, 1);
+                }
+
+                enemies.forEach((enemy, enemyIndex) => {
+                    if (bullet.position.distanceTo(enemy.position) < 0.5) {
+                        console.log("Treffer!"); // Debugging-Ausgabe
+                        scene.remove(bullet);
+                        bullets.splice(bulletIndex, 1);
+                        scene.remove(enemy);
+                        enemies.splice(enemyIndex, 1);
                     }
-                    updateDisplay();
-                }, 1000);
-            }
-        }
-
-        function buyCryptoMiner() {
-            if (points >= cryptoMinerCost) {
-                points -= cryptoMinerCost;
-                cryptoMiners++;
-                cryptoMinerCost = Math.floor(cryptoMinerCost * 1.5);
-                updateDisplay();
-                animateCryptoMiningImage();
-            }
-        }
-
-        function animateCryptoMiningImage() {
-            const image = document.getElementById('cryptoMiningImage');
-            image.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                image.style.transform = 'scale(1)';
-            }, 200);
-        }
-
-        function updateDisplay() {
-            pointsDisplay.textContent = `${Math.floor(points)} Punkte`;
-            levelDisplay.textContent = `Level ${level}`;
-            powerUpButton.textContent = `Power-Up (${powerUpCost} Punkte)`;
-            powerUpButton.disabled = points < powerUpCost || powerUpActive;
-            cryptoMiningButton.textContent = `Crypto Mining (${cryptoMinerCost} Punkte)`;
-            cryptoMiningButton.disabled = points < cryptoMinerCost;
-            cryptoMiningInfo.textContent = `Crypto Miner: ${cryptoMiners} (${(cryptoMiners * 0.1).toFixed(1)}/s)`;
-        }
-
-        function playClickSound() {
-            clickSounds[currentSoundIndex].play();
-            currentSoundIndex = (currentSoundIndex + 1) % clickSounds.length;
-        }
-
-        function updateProgressBar() {
-            const currentThreshold = levelThresholds[level - 1] || levelThresholds[levelThresholds.length - 1];
-            const previousThreshold = level > 1 ? levelThresholds[level - 2] : 0;
-            const progress = ((points - previousThreshold) / (currentThreshold - previousThreshold)) * 100;
-            progressBar.style.width = `${progress}%`;
-        }
-
-        function checkLevelUp() {
-            if (levelThresholds[level - 1] && points >= levelThresholds[level - 1]) {
-                level++;
-                levelDisplay.textContent = `Level ${level}`;
-                createLevelUpAnimation();
-                levelUpSound.play();
-                updateProgressBar();
-            }
-        }
-
-        function createPlusOne() {
-            const plusOne = document.createElement('div');
-            plusOne.textContent = `+${1 * pointMultiplier}`;
-            plusOne.className = 'plus-one';
-            
-            const randomX = Math.random() * (window.innerWidth - 50);
-            const startY = window.innerHeight;
-            
-            plusOne.style.left = `${randomX}px`;
-            plusOne.style.top = `${startY}px`;
-            document.body.appendChild(plusOne);
-
-            let start;
-            function animate(timestamp) {
-                if (!start) start = timestamp;
-                const progress = timestamp - start;
-                const newY = startY - progress / 2;
-                
-                plusOne.style.top = `${newY}px`;
-                plusOne.style.opacity = 1 - progress / 2000;
-
-                if (progress < 2000) {
-                    requestAnimationFrame(animate);
-                } else {
-                    document.body.removeChild(plusOne);
-                }
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        function createLevelUpAnimation() {
-            const levelUp = document.createElement('div');
-            levelUp.textContent = 'Level Up!';
-            levelUp.className = 'level-up';
-            
-            levelUp.style.left = '50%';
-            levelUp.style.top = '50%';
-            levelUp.style.transform = 'translate(-50%, -50%)';
-            document.body.appendChild(levelUp);
-
-            let start;
-            function animate(timestamp) {
-                if (!start) start = timestamp;
-                const progress = timestamp - start;
-                
-                levelUp.style.opacity = 1 - progress / 2000;
-                levelUp.style.transform = `translate(-50%, -50%) scale(${1 + progress / 2000})`;
-
-                if (progress < 2000) {
-                    requestAnimationFrame(animate);
-                } else {
-                    document.body.removeChild(levelUp);
-                }
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        // Crypto Mining-Logik
-        setInterval(() => {
-            points += cryptoMiners * 0.1;
-            updateDisplay();
-            updateProgressBar();
-            checkLevelUp();
-            updateLeaderboard();
-        }, 1000);
-
-        // Leaderboard-Funktionen
-        function updateLeaderboard() {
-            const playerName = playerNameInput.value.trim() || 'Anonym';
-            let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-            
-            // Aktualisiere oder füge den aktuellen Spieler hinzu
-            const playerIndex = leaderboard.findIndex(entry => entry.name === playerName);
-            if (playerIndex !== -1) {
-                leaderboard[playerIndex].points = Math.max(leaderboard[playerIndex].points, points);
-            } else {
-                leaderboard.push({ name: playerName, points: points });
-            }
-
-            // Sortiere das Leaderboard nach Punkten
-            leaderboard.sort((a, b) => b.points - a.points);
-
-            // Begrenze das Leaderboard auf die Top 10
-            leaderboard = leaderboard.slice(0, 10);
-
-            // Speichere das aktualisierte Leaderboard
-            localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
-
-            // Aktualisiere die Anzeige
-            displayLeaderboard(leaderboard);
-        }
-
-        function displayLeaderboard(leaderboard) {
-            leaderboardList.innerHTML = '';
-            leaderboard.forEach((entry, index) => {
-                const li = document.createElement('li');
-                li.textContent = `${index + 1}. ${entry.name}: ${Math.floor(entry.points)} Punkte`;
-                leaderboardList.appendChild(li);
+                });
             });
+
+            renderer.render(scene, camera);
         }
-
-        // Initialisiere die Anzeige
-        updateDisplay();
-        updateProgressBar();
-        updateLeaderboard();
-
-        // Event-Listener für Namensänderungen
-        playerNameInput.addEventListener('change', updateLeaderboard);
+        animate();
     </script>
 </body>
 </html>
