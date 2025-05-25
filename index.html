@@ -5,58 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Einfacher 3D Ego Shooter</title>
     <style>
-        body { margin: 0; }
+        body { margin: 0; overflow: hidden; }
         canvas { display: block; }
     </style>
 </head>
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Szene, Kamera und Renderer erstellen
+        // Szene, Kamera, Renderer
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x87CEEB); // Himmelblau
+        scene.background = new THREE.Color(0x87CEEB);
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Spieler erstellen
+        // Spieler
         const playerGeometry = new THREE.BoxGeometry(0.5, 1, 0.5);
         const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
         const player = new THREE.Mesh(playerGeometry, playerMaterial);
         scene.add(player);
 
-        // Kamera initial positionieren
-        camera.position.set(0, 1, 3);
+        // Kamera initialisieren
+        camera.position.set(0, 1.6, 5);
         camera.lookAt(player.position);
 
         // Bewegung
         const keys = {};
-        document.addEventListener('keydown', (event) => {
-            keys[event.code] = true;
-        });
-        document.addEventListener('keyup', (event) => {
-            keys[event.code] = false;
-        });
+        document.addEventListener('keydown', e => keys[e.code] = true);
+        document.addEventListener('keyup', e => keys[e.code] = false);
 
         // Schießen
         const bullets = [];
         const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+
         document.addEventListener('mousedown', (event) => {
             if (event.button === 0) { // Linke Maustaste
-                console.log("Linke Maustaste gedrückt!"); // Debugging-Ausgabe
                 const bulletGeometry = new THREE.SphereGeometry(0.1, 8, 8);
                 const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
                 bullet.position.copy(camera.position);
-                bullet.velocity = new THREE.Vector3();
-                bullet.velocity.copy(camera.getWorldDirection(new THREE.Vector3()).multiplyScalar(10));
+                const direction = new THREE.Vector3();
+                camera.getWorldDirection(direction);
+                bullet.userData.velocity = direction.clone().multiplyScalar(0.5); // Geschwindigkeit
                 bullets.push(bullet);
                 scene.add(bullet);
-                console.log("Kugel erstellt und zur Szene hinzugefügt."); // Debugging-Ausgabe
             }
         });
 
-        // Gegner erstellen
+        // Gegner
         const enemies = [];
         const enemyMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
         for (let i = 0; i < 5; i++) {
@@ -67,14 +63,14 @@
             scene.add(enemy);
         }
 
-        // Boden hinzufügen
+        // Boden
         const floorGeometry = new THREE.PlaneGeometry(20, 20);
         const floorMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide });
         const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-        floor.rotation.x = -Math.PI / 2; // Boden horizontal ausrichten
+        floor.rotation.x = -Math.PI / 2;
         scene.add(floor);
 
-        // Wände hinzufügen
+        // Wände
         const wallMaterial = new THREE.MeshBasicMaterial({ color: 0x888888 });
         const wallGeometry = new THREE.BoxGeometry(0.1, 2, 20);
         const wall1 = new THREE.Mesh(wallGeometry, wallMaterial);
@@ -86,20 +82,20 @@
         scene.add(wall2);
 
         const wall3 = new THREE.Mesh(wallGeometry, wallMaterial);
-        wall3.rotation.y = Math.PI / 2; // Wand drehen
+        wall3.rotation.y = Math.PI / 2;
         wall3.position.set(0, 1, -10);
         scene.add(wall3);
 
         const wall4 = new THREE.Mesh(wallGeometry, wallMaterial);
-        wall4.rotation.y = Math.PI / 2; // Wand drehen
+        wall4.rotation.y = Math.PI / 2;
         wall4.position.set(0, 1, 10);
         scene.add(wall4);
 
-        // Animationsschleife
+        // Animationsloop
         function animate() {
             requestAnimationFrame(animate);
 
-            // Spielerbewegung
+            // Bewegung
             if (keys['ArrowUp'] || keys['KeyW']) player.position.z -= 0.1;
             if (keys['ArrowDown'] || keys['KeyS']) player.position.z += 0.1;
             if (keys['ArrowLeft'] || keys['KeyA']) player.position.x -= 0.1;
@@ -107,28 +103,33 @@
 
             // Kamera folgt dem Spieler
             camera.position.x = player.position.x;
-            camera.position.z = player.position.z + 3; // Abstand zur Spielerposition
-            camera.position.y = 1; // Höhe der Kamera
+            camera.position.z = player.position.z + 3;
             camera.lookAt(player.position);
 
-            // Kugeln bewegen und Kollisionserkennung
-            bullets.forEach((bullet, bulletIndex) => {
-                bullet.position.add(bullet.velocity);
-                if (bullet.position.length() > 50) {
+            // Kugeln bewegen
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                const bullet = bullets[i];
+                bullet.position.add(bullet.userData.velocity);
+
+                // Entfernen, wenn zu weit
+                if (bullet.position.length() > 100) {
                     scene.remove(bullet);
-                    bullets.splice(bulletIndex, 1);
+                    bullets.splice(i, 1);
+                    continue;
                 }
 
-                enemies.forEach((enemy, enemyIndex) => {
+                // Kollision mit Gegner
+                for (let j = enemies.length - 1; j >= 0; j--) {
+                    const enemy = enemies[j];
                     if (bullet.position.distanceTo(enemy.position) < 0.5) {
-                        console.log("Treffer!"); // Debugging-Ausgabe
-                        scene.remove(bullet);
-                        bullets.splice(bulletIndex, 1);
                         scene.remove(enemy);
-                        enemies.splice(enemyIndex, 1);
+                        enemies.splice(j, 1);
+                        scene.remove(bullet);
+                        bullets.splice(i, 1);
+                        break;
                     }
-                });
-            });
+                }
+            }
 
             renderer.render(scene, camera);
         }
