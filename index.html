@@ -1,139 +1,156 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Einfacher 3D Ego Shooter</title>
-    <style>
-        body { margin: 0; overflow: hidden; }
-        canvas { display: block; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Viraly – Der Clip-Marktplatz</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script defer src="app.js"></script>
 </head>
 <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        // Szene, Kamera, Renderer
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x87CEEB);
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+  <header class="header">
+    <div class="container">
+      <h1 class="logo">🎬 Viraly</h1>
+      <nav class="nav">
+        <a href="#landing" onclick="showSection('landing')">Landing Page</a>
+        <a href="#about" onclick="showSection('about')">Was ist Viraly?</a>
+        <a href="#marketplace" onclick="showSection('marketplace')">Marktplatz</a>
+        <a href="#join" onclick="showSection('join')">Mitmachen</a>
+      </nav>
+    </div>
+  </header>
 
-        // Spieler
-        const playerGeometry = new THREE.BoxGeometry(0.5, 1, 0.5);
-        const playerMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        const player = new THREE.Mesh(playerGeometry, playerMaterial);
-        scene.add(player);
+  <section id="landing" class="section">
+    <div class="container">
+      <h2>✨ Startseiten-Text für Viraly</h2>
+      <div class="landing-content">
+        <div class="landing-card">
+          <h3>Clips verbreiten, Reichweite verdienen</h3>
+          <p>Viraly ist dein Sprungbrett in die Creator-Welt. Veröffentliche Clips großer Organisationen und verdiene Geld mit Reichweite, Engagement und Aufmerksamkeit – ganz ohne eigene Follower.</p>
+        </div>
+        <div class="landing-card">
+          <h3>Was ist Viraly?</h3>
+          <p>Viraly ist ein innovativer Marktplatz, der Creator, Organisationen und Social-Media-Nutzer miteinander verbindet. Ob Unternehmen, Parteien, Influencer oder NGOs – sie stellen Videoinhalte zur Verfügung und legen ein Budget fest. Du als Clipper postest diese Inhalte auf TikTok, Instagram, YouTube oder Snapchat – und wirst basierend auf der Performance deiner Posts belohnt.</p>
+        </div>
+        <div class="landing-card">
+          <h3>Warum mitmachen?</h3>
+          <ul>
+            <li>💸 Verdiene echtes Geld mit Reichweite</li>
+            <li>🧠 Lerne, wie viraler Content funktioniert</li>
+            <li>🚀 Werde Teil einer wachsenden Creator-Community</li>
+            <li>🔄 Volle Freiheit: Du entscheidest, wann und was du postest</li>
+          </ul>
+        </div>
+        <div class="landing-card">
+          <p>Jetzt mitmachen</p>
+          <p>Egal ob du Creator bist und deine Inhalte verbreiten willst – oder Clipper, der mit gutem Posting Geld verdienen möchte: Starte jetzt auf Viraly.</p>
+          <a href="#join" class="cta-button" onclick="showSection('join')">Jetzt mitmachen</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        // Kamera initialisieren
-        camera.position.set(0, 1.6, 5);
-        camera.lookAt(player.position);
+  <section id="about" class="section" style="display: none;">
+    <div class="container">
+      <h3>🧩 Was ist Viraly?</h3>
+      <p>Viraly ist ein digitaler Marktplatz für Reichweite. Er verbindet Creator und Organisationen mit einer aktiven Community von Social-Media-Nutzern, die bereit sind, Inhalte gezielt zu verbreiten – gegen faire Bezahlung.</p>
+      <p>Anstatt selbst teure Werbekampagnen zu schalten, können Unternehmen oder Influencer ihre Clips auf Viraly hochladen und ein Budget festlegen. Private Nutzer („Clipper“) veröffentlichen diese Inhalte auf TikTok, Instagram, YouTube Shorts oder Snapchat – und erhalten eine leistungsabhängige Vergütung.</p>
+      
+      <h4>So funktioniert Viraly – Schritt für Schritt:</h4>
+      <div class="grid-container">
+        <div class="step-card">
+          <div class="step-icon">🎥</div>
+          <div class="step-content">
+            <h5>Clip & Budget hochladen</h5>
+            <p>Organisationen, Parteien, Unternehmen oder Creator stellen ihr Video und ein Gesamtbudget zur Verfügung.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-icon">📲</div>
+          <div class="step-content">
+            <h5>Clips auswählen & posten</h5>
+            <p>Nutzer durchstöbern den Marktplatz, wählen ein Video aus und posten es auf ihrem Social-Media-Kanal.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-icon">📈</div>
+          <div class="step-content">
+            <h5>Reichweite wird automatisch gemessen</h5>
+            <p>Views, Likes, Shares und Interaktionen werden über Tracking-Technologien ausgewertet.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-icon">💰</div>
+          <div class="step-content">
+            <h5>Geld verdienen mit Aufmerksamkeit</h5>
+            <p>Je höher deine Performance, desto mehr bekommst du vom Budget – transparent und automatisch.</p>
+          </div>
+        </div>
+      </div>
+      
+      <p>🔐 Sicher. Fair. Einfach.</p>
+      <p>Viraly bringt Sichtbarkeit dahin, wo sie entsteht: bei echten Nutzern auf echten Plattformen. Mit nur wenigen Klicks kannst du Inhalte verbreiten – und dir dabei etwas dazuverdienen.</p>
+    </div>
+  </section>
 
-        // Bewegung
-        const keys = {};
-        document.addEventListener('keydown', e => keys[e.code] = true);
-        document.addEventListener('keyup', e => keys[e.code] = false);
+  <section id="marketplace" class="section" style="display: none;">
+    <div class="container">
+      <h3>Marktplatz</h3>
+      <div class="card-grid" id="marketplace-grid">
+        <div class="card">
+          <h4>Clip Titel</h4>
+          <p>Beschreibung des Clips</p>
+          <p>Plattformen: TikTok, Instagram</p>
+          <button onclick="selectClip()">Clip auswählen</button>
+        </div>
+        <!-- Weitere Clips können hier dynamisch hinzugefügt werden -->
+      </div>
+    </div>
+  </section>
 
-        // Schießen
-        const bullets = [];
-        const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+  <section id="join" class="section" style="display: none;">
+    <div class="container">
+      <h3>Jetzt registrieren</h3>
+      <form id="join-form" onsubmit="event.preventDefault(); greetUser();">
+        <input type="text" placeholder="Dein Name" required />
+        <select required>
+          <option value="">Wähle deine Rolle</option>
+          <option value="creator">Creator</option>
+          <option value="clipper">Clipper</option>
+        </select>
+        <input type="text" placeholder="Social-Media-Handle (optional)" />
+        <button type="submit">Mitmachen</button>
+      </form>
+    </div>
+  </section>
 
-        document.addEventListener('mousedown', (event) => {
-            if (event.button === 0) { // Linke Maustaste
-                const bulletGeometry = new THREE.SphereGeometry(0.1, 8, 8);
-                const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
-                bullet.position.copy(camera.position);
-                const direction = new THREE.Vector3();
-                camera.getWorldDirection(direction);
-                bullet.userData.velocity = direction.clone().multiplyScalar(0.5); // Geschwindigkeit
-                bullets.push(bullet);
-                scene.add(bullet);
-            }
-        });
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 Viraly – Empowering Clips, Rewarding Reach.</p>
+    </div>
+  </footer>
 
-        // Gegner
-        const enemies = [];
-        const enemyMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
-        for (let i = 0; i < 5; i++) {
-            const enemyGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-            const enemy = new THREE.Mesh(enemyGeometry, enemyMaterial);
-            enemy.position.set((Math.random() - 0.5) * 10, 0.25, (Math.random() - 0.5) * 10);
-            enemies.push(enemy);
-            scene.add(enemy);
-        }
+  <script>
+    function showSection(sectionId) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(section => {
+        section.style.display = 'none';
+      });
+      document.getElementById(sectionId).style.display = 'block';
+    }
 
-        // Boden
-        const floorGeometry = new THREE.PlaneGeometry(20, 20);
-        const floorMaterial = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, side: THREE.DoubleSide });
-        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-        floor.rotation.x = -Math.PI / 2;
-        scene.add(floor);
+    function selectClip() {
+      alert("Clip ausgewählt!");
+    }
 
-        // Wände
-        const wallMaterial = new THREE.MeshBasicMaterial({ color: 0x888888 });
-        const wallGeometry = new THREE.BoxGeometry(0.1, 2, 20);
-        const wall1 = new THREE.Mesh(wallGeometry, wallMaterial);
-        wall1.position.set(-10, 1, 0);
-        scene.add(wall1);
+    function greetUser() {
+      alert("Willkommen bei Viraly!");
+    }
 
-        const wall2 = new THREE.Mesh(wallGeometry, wallMaterial);
-        wall2.position.set(10, 1, 0);
-        scene.add(wall2);
-
-        const wall3 = new THREE.Mesh(wallGeometry, wallMaterial);
-        wall3.rotation.y = Math.PI / 2;
-        wall3.position.set(0, 1, -10);
-        scene.add(wall3);
-
-        const wall4 = new THREE.Mesh(wallGeometry, wallMaterial);
-        wall4.rotation.y = Math.PI / 2;
-        wall4.position.set(0, 1, 10);
-        scene.add(wall4);
-
-        // Animationsloop
-        function animate() {
-            requestAnimationFrame(animate);
-
-            // Bewegung
-            if (keys['ArrowUp'] || keys['KeyW']) player.position.z -= 0.1;
-            if (keys['ArrowDown'] || keys['KeyS']) player.position.z += 0.1;
-            if (keys['ArrowLeft'] || keys['KeyA']) player.position.x -= 0.1;
-            if (keys['ArrowRight'] || keys['KeyD']) player.position.x += 0.1;
-
-            // Kamera folgt dem Spieler
-            camera.position.x = player.position.x;
-            camera.position.z = player.position.z + 3;
-            camera.lookAt(player.position);
-
-            // Kugeln bewegen
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                const bullet = bullets[i];
-                bullet.position.add(bullet.userData.velocity);
-
-                // Entfernen, wenn zu weit
-                if (bullet.position.length() > 100) {
-                    scene.remove(bullet);
-                    bullets.splice(i, 1);
-                    continue;
-                }
-
-                // Kollision mit Gegner
-                for (let j = enemies.length - 1; j >= 0; j--) {
-                    const enemy = enemies[j];
-                    if (bullet.position.distanceTo(enemy.position) < 0.5) {
-                        scene.remove(enemy);
-                        enemies.splice(j, 1);
-                        scene.remove(bullet);
-                        bullets.splice(i, 1);
-                        break;
-                    }
-                }
-            }
-
-            renderer.render(scene, camera);
-        }
-        animate();
-    </script>
+    // Standardmäßig die Landing-Seite anzeigen
+    showSection('landing');
+  </script>
 </body>
 </html>
